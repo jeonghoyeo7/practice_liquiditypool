@@ -1,6 +1,6 @@
 package processings
 
-// Do transactions in a serial manner
+// Do tran in a serial manner
 func ProcessBlocks() {
 
 }
