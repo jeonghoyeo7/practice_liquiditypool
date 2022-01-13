@@ -1,6 +1,7 @@
 package liquidity
 
 import (
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -15,6 +16,51 @@ type Transaction struct {
 	RemainCoinX          sdk.DecCoin
 	RemainCoinY          sdk.DecCoin
 	RemainLiquidityToken sdk.DecCoin
+}
+
+func (tran Transaction) Print() {
+	fmt.Printf("<Current %s Transaction Status>\n", tran.Order)
+
+	switch tran.Order {
+	case "swapXtoY":
+		fmt.Printf("Input Coin X = %f \n", tran.CoinX.Amount)
+	case "swapYtoX":
+		fmt.Printf("Input Coin Y = %f \n", tran.CoinY.Amount)
+	case "deposit":
+		fmt.Printf("Input Coin X = %f \n", tran.CoinX.Amount)
+		fmt.Printf("Input Coin Y = %f \n", tran.CoinY.Amount)
+	case "withdraw":
+		fmt.Printf("Input Liquidity Token = %f \n", tran.LiquidityToken.Amount)
+	default:
+
+	}
+
+	fmt.Println("-----------------------------------")
+}
+
+func (tran Transaction) PrintReceipt() {
+	fmt.Printf("<Current %s Transaction Receipt>\n", tran.Order)
+	fmt.Println(tran.Result)
+	switch tran.Order {
+	case "swapXtoY":
+		fmt.Printf("Input Coin X  = %f \n", tran.CoinX.Amount)
+		fmt.Printf("Output Coin Y = %f \n", tran.RemainCoinY.Amount)
+	case "swapYtoX":
+		fmt.Printf("Input Coin Y  = %f \n", tran.CoinY.Amount)
+		fmt.Printf("Output Coin X = %f \n", tran.RemainCoinX.Amount)
+	case "deposit":
+		fmt.Printf("Input Coin X      = %f \n", tran.CoinX.Amount)
+		fmt.Printf("Input Coin Y      = %f \n", tran.CoinY.Amount)
+		fmt.Printf("Output Liq. Token = %f \n", tran.RemainLiquidityToken.Amount)
+	case "withdraw":
+		fmt.Printf("Input Liq. Token = %f \n", tran.LiquidityToken.Amount)
+		fmt.Printf("Output Coin X    = %f \n", tran.RemainCoinX.Amount)
+		fmt.Printf("Output Coin Y    = %f \n", tran.RemainCoinY.Amount)
+	default:
+
+	}
+
+	fmt.Println("-----------------------------------")
 }
 
 func GenerateTransaction() *Transaction {

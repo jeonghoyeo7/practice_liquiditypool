@@ -15,6 +15,16 @@ type Pool struct {
 	Fee                   sdk.Dec     // swap fee. assumed as 0 for this test
 }
 
+func (lp Pool) Print() {
+	fmt.Println("<Current Liquidity Pool Status>")
+	fmt.Printf("Coin X = %f \n", lp.CoinX.Amount)
+	fmt.Printf("Coin Y = %f \n", lp.CoinY.Amount)
+	fmt.Printf("Price  = %f \n", lp.Price)
+	fmt.Printf("K      = %f \n", lp.K)
+	fmt.Printf("Fee    = %f \n", lp.Fee)
+	fmt.Println("-------------------------------")
+}
+
 func CreatePool() Pool {
 	var lp Pool
 	lp.Init()
@@ -125,7 +135,9 @@ func (lp *Pool) Deposit(transaction *Transaction) {
 		dx = lp.Price.Mul(dy)
 	} else { // if dx/dy <= Price -> too much dy : dx/dy' = Price --> dy' = dx/Price
 		dx = transaction.CoinX.Amount
-		dy = dx.Quo(lp.Price)
+		//dy = dx.Quo(lp.Price) //lp.CoinX.Amount.Quo(lp.CoinY.Amount)
+		tempdy := dx.Mul(lp.CoinY.Amount)
+		dy = tempdy.Quo(lp.CoinX.Amount)
 	}
 
 	beforeLiquidityToken := lp.TotalLiquidityToken.Amount
@@ -153,8 +165,12 @@ func (lp *Pool) Withdraw(transaction *Transaction) {
 	if ratio.GT(sdk.NewDec(int64(1))) { // not possible
 		fmt.Println("Trading Error: Too much liquidity tokens entered.")
 	} else {
-		dx = ratio.Mul(lp.CoinX.Amount)
-		dy = ratio.Mul(lp.CoinY.Amount)
+		//dx = ratio.Mul(lp.CoinX.Amount)
+		tempdx := transaction.LiquidityToken.Amount.Mul(lp.CoinX.Amount)
+		dx = tempdx.Quo(lp.TotalLiquidityToken.Amount)
+		//dy = ratio.Mul(lp.CoinY.Amount)
+		tempdy := transaction.LiquidityToken.Amount.Mul(lp.CoinY.Amount)
+		dy = tempdy.Quo(lp.TotalLiquidityToken.Amount)
 	}
 
 	beforeLiquidityToken := lp.TotalLiquidityToken.Amount

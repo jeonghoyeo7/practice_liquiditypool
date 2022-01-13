@@ -8,6 +8,21 @@ import (
 const simulationTime time.Duration = 10 // 10 seconds simulation
 
 func main() {
+	// Test 1:
+	//    - when price get back to original price → pool token balances exactly same as initial balances?
+	//    - what is the relationship between future pool token balances and price change?
+	//        - theoretical vs simulation result
+	// test.SimpleTest()
+	// Observation: Almost the same. The reason why the pool token balances before/after price changes are different is because of precision in the calculations.
+
+	// Test 2: Random generation of transactions, queueing, processing in periodic manner
+	test.RandomSimulate(200, 2, 10) // unit: 0.1sec
+
+	// Test 3: an arbitrage bot swapping on the AMM
+	// Assumptions: one Liquidity Pool, one legacy market (like infinity pool),
+	// Assumptions: no transactions from other users
+	// test.ArbitrageTest(100)
+
 	//liquidity.AvgArrival = 1000 // ms for new 1  arrival
 
 	// Generate Transactions
@@ -16,5 +31,4 @@ func main() {
 
 	//time.Sleep(simulationTime * time.Second)
 
-	test.Simpletest()
 }
