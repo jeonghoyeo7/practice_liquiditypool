@@ -42,8 +42,8 @@ func ArbitrageTest(simulateTime int) {
 		referPrice = referPrice.Add(referPrice.Mul(changeRatioDec))
 
 		fmt.Println("Trade Starting.")
-		fmt.Println(" >> Current reference market price: ", referPrice)
-		fmt.Println(" >> Current liquidity pool price: ", lp.Price)
+		fmt.Printf("  >>  Current reference market price: %8.4f\n", liquidity.DecToFloat64(referPrice))
+		fmt.Printf("  >>  Current liquidity pool price:   %8.4f\n", liquidity.DecToFloat64(lp.Price))
 
 		if lp.Price.GT(referPrice) {
 			resultTrade := wallet.arbitrageTrade(&lp, referPrice)
@@ -55,8 +55,8 @@ func ArbitrageTest(simulateTime int) {
 			fmt.Printf("Swap Y(%14.6f) to X(%14.6f) in the ideal market. \n", liquidity.DecToFloat64(resultTrade[1]), liquidity.DecToFloat64(resultTrade[2]))
 		}
 
-		fmt.Println("  >>>>  Current reference market price: ", referPrice)
-		fmt.Println("  >>>>  Current liquidity pool price: ", lp.Price)
+		fmt.Printf("  >>>>  Current reference market price: %8.4f\n", liquidity.DecToFloat64(referPrice))
+		fmt.Printf("  >>>>  Current liquidity pool price:   %8.4f\n", liquidity.DecToFloat64(lp.Price))
 		fmt.Println("Trade Completed.")
 		fmt.Printf("Current wallet has %s.\n", wallet.SprintLine())
 		time.Sleep(time.Second)
