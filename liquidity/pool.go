@@ -16,13 +16,13 @@ type Pool struct {
 }
 
 func (lp Pool) Print() {
-	fmt.Println("<Current Liquidity Pool Status>")
-	fmt.Printf("Coin X = %f \n", lp.CoinX.Amount)
-	fmt.Printf("Coin Y = %f \n", lp.CoinY.Amount)
-	fmt.Printf("Price  = %f \n", lp.Price)
-	fmt.Printf("K      = %f \n", lp.K)
-	fmt.Printf("Fee    = %f \n", lp.Fee)
-	fmt.Println("-------------------------------")
+	fmt.Println("-------<Current Liquidity Pool Status>---------------------------")
+	fmt.Printf("     Coin X = %14.6f \n", DecToFloat64(lp.CoinX.Amount))
+	fmt.Printf("     Coin Y = %14.6f \n", DecToFloat64(lp.CoinY.Amount))
+	fmt.Printf("     Price  = %14.6f \n", DecToFloat64(lp.Price))
+	fmt.Printf("     K      = %14.2f \n", DecToFloat64(lp.K))
+	fmt.Printf("     Fee    = %14.6f \n", DecToFloat64(lp.Fee))
+	fmt.Println("-----------------------------------------------------------------")
 }
 
 func CreatePool() Pool {
@@ -179,11 +179,24 @@ func (lp *Pool) Withdraw(transaction *Transaction) {
 	lp.UpdateK() // update K and prices
 
 	// update receipt in below
-
 	transaction.RemainLiquidityToken.Amount = transaction.LiquidityToken.Amount.Sub(beforeLiquidityToken.Sub(lp.TotalLiquidityToken.Amount)) // the
 	// This should be zero.
 
 	transaction.Result = "Withdraw Completed Successfully "
 	transaction.RemainCoinX.Amount = dx
 	transaction.RemainCoinY.Amount = dy
+}
+
+func ComparePoolsPrint(lp1 Pool, lp2 Pool) {
+	fmt.Println("-------<Changes on Liquidity Pool Status>------------------------")
+	fmt.Printf("     Coin X = %14.6f --> %14.6f \n", DecToFloat64(lp1.CoinX.Amount), DecToFloat64(lp2.CoinX.Amount))
+	fmt.Printf("     Coin Y = %14.6f --> %14.6f \n", DecToFloat64(lp1.CoinY.Amount), DecToFloat64(lp2.CoinY.Amount))
+	fmt.Printf("     Price  = %14.6f --> %14.6f \n", DecToFloat64(lp1.Price), DecToFloat64(lp2.Price))
+	fmt.Printf("     K      = %14.2f --> %14.2f \n", DecToFloat64(lp1.K), DecToFloat64(lp2.K))
+	fmt.Printf("     Fee    = %14.6f --> %14.6f \n", DecToFloat64(lp1.Fee), DecToFloat64(lp2.Fee))
+	fmt.Println("-----------------------------------------------------------------")
+}
+
+func (lp Pool) SprintLine() string {
+	return fmt.Sprintf("%14.6f%s, %14.6f%s, Price %8.4f", DecToFloat64(lp.CoinX.Amount), lp.CoinX.Denom, DecToFloat64(lp.CoinY.Amount), lp.CoinY.Denom, DecToFloat64(lp.Price))
 }
