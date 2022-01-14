@@ -1,3 +1,13 @@
+#How to Use
+The main functions can run three tests.
+ 1. Broadcast 4 transactions and monitoring the changes of liquidity pool.
+ 2. Keep broadcasting transactions and processing
+ 3. Arbitrage trading with a liquidity pool and an ideal market
+
+These can be run by uncommenting the corresponding line in the main function.
+
+##Target 
+
 This is to implement liquidity pool and make transactions as a toy problem.
 
 - batch style system (blockchain-like)
