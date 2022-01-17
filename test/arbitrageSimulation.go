@@ -3,13 +3,14 @@ package test
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/dustin/go-humanize"
 	"math/rand"
 	"time"
 	"uniswap_test/liquidity"
 )
 
-func ArbitrageTest(simulateTime int) {
-	// create a liquidity pool --------------------------------------------
+func ArbitrageSimulation(simulateTime int) {
+	//// create a liquidity pool --------------------------------------------
 	lp := liquidity.CreatePool()
 	// pool initial setup
 	var CoinX, CoinY sdk.DecCoin
@@ -41,7 +42,7 @@ func ArbitrageTest(simulateTime int) {
 		changeRatioDec := sdk.NewDec(int64(changeRatio * 1000.0)).Quo(sdk.NewDec(int64(1000)))
 		referPrice = referPrice.Add(referPrice.Mul(changeRatioDec))
 
-		fmt.Println("Trade Starting.")
+		fmt.Printf("%s trade Starting.\n", humanize.Ordinal(i+1))
 		fmt.Printf("  >>  Current reference market price: %8.4f\n", liquidity.DecToFloat64(referPrice))
 		fmt.Printf("  >>  Current liquidity pool price:   %8.4f\n", liquidity.DecToFloat64(lp.Price))
 
@@ -57,7 +58,7 @@ func ArbitrageTest(simulateTime int) {
 
 		fmt.Printf("  >>>>  Current reference market price: %8.4f\n", liquidity.DecToFloat64(referPrice))
 		fmt.Printf("  >>>>  Current liquidity pool price:   %8.4f\n", liquidity.DecToFloat64(lp.Price))
-		fmt.Println("Trade Completed.")
+		fmt.Printf("%s trade Completed.\n", humanize.Ordinal(i+1))
 		fmt.Printf("Current wallet has %s.\n", wallet.SprintLine())
 		time.Sleep(time.Second)
 

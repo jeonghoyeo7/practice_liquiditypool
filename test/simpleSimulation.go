@@ -7,7 +7,7 @@ import (
 	"uniswap_test/liquidity"
 )
 
-func SimpleTest() {
+func SimpleSimulation() {
 	// create a liquidity pool
 	lp := liquidity.CreatePool()
 	fmt.Println("A liquidity pool is created ----------------------------------")

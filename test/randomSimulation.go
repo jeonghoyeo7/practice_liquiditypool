@@ -11,7 +11,7 @@ import (
 var cntProcess int
 var cntTransaction int
 
-func RandomSimulate(simulateTime time.Duration, intervalTransactions time.Duration, intervalBlock time.Duration) {
+func RandomSimulation(simulateTime time.Duration, intervalTransactions time.Duration, intervalBlock time.Duration) {
 	var wg sync.WaitGroup
 
 	// counters
@@ -63,11 +63,11 @@ func processTransactions(wg *sync.WaitGroup, channelTransaction chan liquidity.T
 		case <-tick:
 			// Processing the queue
 
-			fmt.Printf("We have now %d transactions to be processed. \n", tq.Len().(int))
+			fmt.Printf("We have now %d transactions to be committed. \n", tq.Len().(int))
 			for i := 0; i < tq.Len().(int); i++ {
 				tran := tq.Pop().(liquidity.Transaction)
 				cntProcess += 1
-				fmt.Println(cntProcess, " processing : ", tran.SprintLine())
+				fmt.Println(cntProcess, " commit a transaction : ", tran.SprintLine())
 				tranResult := processTransaction(tran, &lp)
 				fmt.Println("        >> current Pool : ", lp.SprintLine())
 				tqResult.Push(tranResult)
@@ -77,7 +77,7 @@ func processTransactions(wg *sync.WaitGroup, channelTransaction chan liquidity.T
 			fmt.Printf("Current Status of liquidity pool after %d processing\n", cntProcess)
 			liquidity.ComparePoolsPrint(initialPool, lp)
 
-			fmt.Println("Processing is finished!")
+			fmt.Println("All block commit is finished!")
 			wg.Done()
 			return
 

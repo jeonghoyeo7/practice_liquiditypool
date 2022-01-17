@@ -43,7 +43,7 @@ func (lp *Pool) Init() {
 
 	lp.InitialLiquidityToken.Denom = "Initial ltoken"
 	lp.InitialLiquidityToken.Amount = sdk.NewDec(int64(0))
-	lp.TotalLiquidityToken.Denom = "Current Total ltoken"
+	lp.TotalLiquidityToken.Denom = "ltoken"
 	lp.TotalLiquidityToken.Amount = sdk.NewDec(int64(0))
 	lp.Fee = sdk.NewDec(int64(0))
 }
@@ -79,7 +79,7 @@ func (lp *Pool) Trade(transaction *Transaction) {
 	case "withdraw":
 		lp.Withdraw(transaction)
 	default:
-		fmt.Println("Trading Error")
+		fmt.Println("Trading Error: Not exact order.")
 	}
 }
 
@@ -164,6 +164,7 @@ func (lp *Pool) Withdraw(transaction *Transaction) {
 
 	if ratio.GT(sdk.NewDec(int64(1))) { // not possible
 		fmt.Println("Trading Error: Too much liquidity tokens entered.")
+		return
 	} else {
 		//dx = ratio.Mul(lp.CoinX.Amount)
 		tempdx := transaction.LiquidityToken.Amount.Mul(lp.CoinX.Amount)
@@ -191,9 +192,9 @@ func ComparePoolsPrint(lp1 Pool, lp2 Pool) {
 	fmt.Println("-------<Changes on Liquidity Pool Status>------------------------")
 	fmt.Printf("     Coin X = %14.6f --> %14.6f \n", DecToFloat64(lp1.CoinX.Amount), DecToFloat64(lp2.CoinX.Amount))
 	fmt.Printf("     Coin Y = %14.6f --> %14.6f \n", DecToFloat64(lp1.CoinY.Amount), DecToFloat64(lp2.CoinY.Amount))
-	fmt.Printf("     Price  = %14.6f --> %14.6f \n", DecToFloat64(lp1.Price), DecToFloat64(lp2.Price))
-	fmt.Printf("     K      = %14.2f --> %14.2f \n", DecToFloat64(lp1.K), DecToFloat64(lp2.K))
-	fmt.Printf("     Fee    = %14.6f --> %14.6f \n", DecToFloat64(lp1.Fee), DecToFloat64(lp2.Fee))
+	fmt.Printf("      Price = %14.6f --> %14.6f \n", DecToFloat64(lp1.Price), DecToFloat64(lp2.Price))
+	fmt.Printf("          K = %14.2f --> %14.2f \n", DecToFloat64(lp1.K), DecToFloat64(lp2.K))
+	fmt.Printf("        Fee = %14.6f --> %14.6f \n", DecToFloat64(lp1.Fee), DecToFloat64(lp2.Fee))
 	fmt.Println("-----------------------------------------------------------------")
 }
 
